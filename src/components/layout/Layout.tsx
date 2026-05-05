@@ -1,18 +1,19 @@
-import type { ReactNode } from 'react';
 import Sidebar from './Sidebar';
 
 type LayoutProps = {
-  children: ReactNode;
-  showSidebar?: boolean;
+  children: React.ReactNode;
 };
 
-export default function Layout({ children, showSidebar = false }: LayoutProps) {
+export default function Layout({ children}: LayoutProps) {
   return (
-    <div className="flex bg-[#F5F5F5] min-h-screen">
-      {showSidebar && <Sidebar onSearch={() => {}} onFilterState={() => {}} />}
-      <main className="flex-1 p-6">
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <Sidebar />
+
+      {/* Conteúdo */}
+      <main className="flex-1 p-6 bg-[#F5F5F5]">
         {children}
       </main>
     </div>
-  );
+  )
 }

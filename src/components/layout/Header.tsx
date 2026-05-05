@@ -32,7 +32,7 @@ function TopBar( {location}: {location: string} ) {
                 <MapPin size={20} className="opacity-80" />
                 <span>{location}</span>  
             </div>
-            <Link to="/login_sigin">
+            <Link to="/login">
                 <button className="bg-[#2f2a28] hover:bg-[#1f1b19] cursor-pointer text-white px-4 py-2 rounded transition-colors">Register</button>
             </Link>
         </div>    

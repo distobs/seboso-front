@@ -1,12 +1,16 @@
 import { Routes, Route } from "react-router-dom";
 
+// Layouts
+import Layout from "../components/layout/Layout";
+
 // Public pages
 import Home from "../pages/public/Home";
 import Books from "../pages/public/Books";
 import About from "../pages/public/About";
 
 // Auth pages
-import LoginSignIn from "../pages/auth/LoginSignin";
+import Login from "../pages/auth/Login";
+import Signup from "../pages/auth/Signup";
 
 // Dashboard pages
 import DashboardHome from "../pages/dashboard/home/DashboardHome";
@@ -24,12 +28,13 @@ export default function AppRoutes() {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/" element={<Home />} />
-      <Route path="/books" element={<Books />} />
-      <Route path="/about" element={<About />} />
+      <Route path="/" element={<Layout><Home /></Layout>} />
+      <Route path="/books" element={<Layout><Books /></Layout>} />
+      <Route path="/about" element={<Layout><About /></Layout>} />
 
       {/* Auth Routes */}
-      <Route path="/login" element={<LoginSignIn />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
 
       {/* Dashboard Routes */}
       <Route path="/dashboard" element={<DashboardHome />} />
