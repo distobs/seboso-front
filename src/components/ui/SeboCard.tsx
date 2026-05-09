@@ -7,7 +7,7 @@ type Props = {
     
 export default function SeboCard({ store }: Props) {
     return (
-        <div className="bg-white rounded-lg border border-[#E5E5E5] px-6 py-4 flex justify-between items-center hover:shadow-md transition">
+        <div className="bg-white rounded-lg border border-[#E5E5E5] px-6 py-4 flex cursor-pointer justify-between items-center hover:shadow-md transition">
             
             {/*Nome do sebo*/}
             <div className="w-1/4 font-medium text-[#2f2a28]">
