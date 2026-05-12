@@ -6,13 +6,25 @@ type Props = {
 
 export default function BookCard({ book }: Props) {
   return (
-    <div className="bg-white rounded-lg border border-[#E5E5E5] px-6 py-4 hover:shadow-md transition">
-      <div className="flex justify-between items-start">
-        <div className="flex-1">
-          <h3 className="font-semibold text-[#2f2a28]">{book.title}</h3>
-          <p className="text-sm text-gray-600">{book.author}</p>
+
+    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow">
+
+      <div className="flex justify-between items-center">
+        <div>
+
+          <h2 className="text-lg font-semibold text-gray-800">
+            {book.title}
+          </h2>
+
+          <p className="text-gray-500">
+            {book.author}
+          </p>
+
+
         </div>
-        <span className="text-sm font-medium text-gray-500">{book.year}</span>
+        <div>
+
+        </div>
       </div>
     </div>
   );

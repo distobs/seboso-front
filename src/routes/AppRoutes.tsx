@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 // Layouts
 import Layout from "../components/layout/Layout";
+import Header from "../components/layout/Header";
 
 // Public pages
 import Home from "../pages/public/Home";
@@ -30,7 +31,7 @@ export default function AppRoutes() {
       {/* Public Routes */}
       <Route path="/" element={<Layout><Home /></Layout>} />
       <Route path="/books" element={<Layout><Books /></Layout>} />
-      <Route path="/about" element={<Layout><About /></Layout>} />
+      <Route path="/about" element={<><Header/><About /></>} />
 
       {/* Auth Routes */}
       <Route path="/login" element={<Login />} />
