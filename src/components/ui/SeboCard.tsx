@@ -1,47 +1,53 @@
-import type { Store } from "../../types/store" // Importa o tipo Store para tipar as props do componente
+import type { Store } from "../../types/store";
 
-// Componente para exibir as informações de um sebo
-type Props = {
-    store: Store;
-}
-    
-export default function SeboCard({ store }: Props) {
-    return (
-        <div className="bg-white rounded-lg border border-[#E5E5E5] px-6 py-4 flex justify-between items-center hover:shadow-md transition">
-            
-            {/*Nome do sebo*/}
-            <div className="w-1/4 font-medium text-[#2f2a28]">
-                {store.name}
-            </div>
+type SeboCardProps = {
+  store: Store;
+};
 
-            {/*Estado*/}
-            <div className="w-1/4 text-[#6b6b6b]">
-                {store.state}
-            </div>
+export default function SeboCard({
+  store,
+}: SeboCardProps) {
 
-            {/* Cidade */}
-            <div className="w-1/5 text-gray-600">
-                {store.city}
-            </div>
+  return (
+    <div className="
+      bg-white
+      border
+      border-gray-200
+      rounded-xl
+      p-5
+      shadow-sm
+      hover:shadow-md
+      transition-shadow
+    ">
 
-            {/*Data*/}
-            <div className="w-1/5 text-gray-500 text-sm">
-                {store.createdAt}
-            </div>
+      <div className="flex justify-between items-start">
 
-            {/* Avaliação */}
-            <div className="w-1/5 text-sm">
-                {store.rating ? (
-                <span className="text-green-600 font-semibold">
-            👍 {store.rating}% recomendam
-                </span>
-            ) : (
-                <span className="text-gray-400">
-                    Ainda não há recomendações
-                </span>
-                )}
-            </div>
+        <div>
+          <h2 className="text-xl font-semibold text-[#2f2a28]">
+            {store.name}
+          </h2>
 
+          <p className="text-gray-500 mt-1">
+            {store.street}, {store.number}
+          </p>
+
+          <p className="text-gray-500">
+            {store.city_block}
+          </p>
         </div>
-    );
+
+        <div className="text-right">
+          <p className="font-medium">
+            {store.city} - {store.state}
+          </p>
+
+          <p className="text-sm text-gray-500 mt-1">
+            CEP: {store.cep}
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  );
 }

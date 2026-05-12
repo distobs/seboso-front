@@ -1,9 +1,13 @@
 export type Store = {
-  id: number;
+  id: string;
   name: string;
-  state: string;
+  cnpj: string;
+  street: string;
+  number: string;
   city: string;
-  createdAt: string;
-  rating?: number; // pode não vir
-  booksCount?: number;
+  city_block: string;
+  state: string;
+  cep: string;
+  
+  createdAt?: string;
 };
