@@ -28,7 +28,7 @@ export default function Home() {
 
       } catch (err) {
 
-        setError("Erro ao carregar sebos: " + (err instanceof Error ? err.message : String(err)));
+        setError("Erro ao carregar sebos: " );
 
       } finally {
 

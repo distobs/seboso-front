@@ -75,6 +75,7 @@ export function getStores(
 
 }
 
+// Função para buscar a lista de livros, com paginação
 export function getBooks(
   page = 1,
   perPage = 10
