@@ -1,7 +1,7 @@
 import { useState, useEffect} from "react"; // Importa os hooks useState e useEffect do React para gerenciar o estado dos livros e realizar a busca na API quando o componente for montado
 import BookCard from "../../components/ui/BookCard"; // Importa o componente BookCard para exibir as informações de cada livro na lista
 import type { Book } from "../../types/book"; // Importa o tipo Book para tipar o estado dos livros e as props do componente BookCard
-import { getBooks } from "../../services/api"; // Importa a função getBooks para buscar os livros na API
+import { getBooks } from "../../services/book.service"; // Importa a função getBooks para buscar os livros na API
 
 export default function Books() {
 
@@ -19,7 +19,7 @@ export default function Books() {
         const booksData = await getBooks();
         console.log("Livros carregados:", booksData);
         setBooks(booksData);
-      } catch (err) {
+      } catch {
         setError("Erro ao buscar livros.");
       } finally {
         setLoading(false);
