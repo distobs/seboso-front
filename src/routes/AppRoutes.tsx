@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { useUserLocation } from "../hooks/useUserLocation";
 
 // Layouts
 import Layout from "../components/layout/Layout";
@@ -26,12 +27,15 @@ import UsersList from "../pages/dashboard/users/UsersList";
 import UserEdit from "../pages/dashboard/users/UserEdit";
 
 export default function AppRoutes() {
+
+  const location = useUserLocation();
+
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/" element={<Layout pageTitle="Sebo"><Home /></Layout>} />
-      <Route path="/books" element={<Layout pageTitle="Livros"><Books /></Layout>} />
-      <Route path="/about" element={<><Header/><About /></>} />
+      <Route path="/" element={<Layout pageTitle="Sebo" location={location}><Home /></Layout>} />
+      <Route path="/books" element={<Layout pageTitle="Livros" location={location}><Books /></Layout>} />
+      <Route path="/about" element={<><Header location={location}/><About /></>} />
 
       {/* Auth Routes */}
       <Route path="/login" element={<Login />} />

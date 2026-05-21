@@ -9,15 +9,19 @@ const navItems = [
   { name: 'About', path: '/about' },
 ];
 
+interface HeaderProps {
+  location: string;
+}
+
+export default function Header({ location }: HeaderProps)
 // Header principal (junta tudo)
-export default function Header() {
+export default function Header({location}: {location: string;}) {
   return (
     <header>
-        <TopBar location="Rio Grande do Sul, Brazil" />
+        <TopBar location={location} />
         <NavBar />
     </header>
-  );
-}
+  );}
 
 // Parte de cima
 function TopBar( {location}: {location: string} ) {

@@ -4,13 +4,14 @@ import Sidebar from "./Sidebar";
 type LayoutProps = {
   children: React.ReactNode;
   pageTitle: string;
+  location: string;
 };
 
-export default function Layout({ children, pageTitle }: LayoutProps) {
+export default function Layout({ children, pageTitle, location }: LayoutProps) {
   return (
     <div className="min-h-screen bg-[#F5F5F5]">
-
-      <Header />
+        
+      <Header location={location} />
       
       <div className="flex">
 
