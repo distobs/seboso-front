@@ -35,6 +35,7 @@ export default function Login() {
 
       authLogin(response.message);
       console.log("Login bem-sucedido!");
+      console.log(localStorage.getItem("token"));
       navigate("/dashboard"); // Redireciona para o dashboard após login bem-sucedido
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro no login");

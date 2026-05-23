@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { useUserLocation } from "../hooks/useUserLocation";
+import ProtectedRoute from "./ProtectedRoute";
 
 // Layouts
 import Layout from "../components/layout/Layout";
@@ -42,24 +43,24 @@ export default function AppRoutes() {
       <Route path="/signup" element={<Signup />} />
 
       {/* Dashboard Routes */}
-      <Route path="/dashboard" element={<DashboardHome />} />
+      <Route path="/dashboard" element={<ProtectedRoute><DashboardHome /></ProtectedRoute>} />
 
       {/* Books Dashboard */}
-      <Route path="/dashboard/books" element={<BooksList />} />
-      <Route path="/dashboard/books/create" element={<BookCreate />} />
-      <Route path="/dashboard/books/:id/edit" element={<BookEdit />} />
+      <Route path="/dashboard/books" element={<ProtectedRoute><BooksList /></ProtectedRoute>} />
+      <Route path="/dashboard/books/create" element={<ProtectedRoute><BookCreate /></ProtectedRoute>} />
+      <Route path="/dashboard/books/:id/edit" element={<ProtectedRoute><BookEdit /></ProtectedRoute>} />
 
       {/* Store Dashboard */}
-      <Route path="/dashboard/store" element={<StoreInfo />} />
-      <Route path="/dashboard/store/edit" element={<StoreEdit />} />
+      <Route path="/dashboard/store" element={<ProtectedRoute><StoreInfo /></ProtectedRoute>} />
+      <Route path="/dashboard/store/edit" element={<ProtectedRoute><StoreEdit /></ProtectedRoute>} />
 
       {/* Employees Dashboard */}
-      <Route path="/dashboard/employees" element={<EmployeesList />} />
-      <Route path="/dashboard/employees/:id/edit" element={<EmployeeEdit />} />
+      <Route path="/dashboard/employees" element={<ProtectedRoute><EmployeesList /></ProtectedRoute>} />
+      <Route path="/dashboard/employees/:id/edit" element={<ProtectedRoute><EmployeeEdit /></ProtectedRoute>} />
 
       {/* Users Dashboard (Admin) */}
-      <Route path="/dashboard/users" element={<UsersList />} />
-      <Route path="/dashboard/users/:id/edit" element={<UserEdit />} />
+      <Route path="/dashboard/users" element={<ProtectedRoute><UsersList /></ProtectedRoute>} />
+      <Route path="/dashboard/users/:id/edit" element={<ProtectedRoute><UserEdit /></ProtectedRoute>} />
     </Routes>
   );
 }

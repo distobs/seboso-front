@@ -2,11 +2,13 @@ import { createContext, useEffect, useState } from "react"; // Importa as funÃ§Ã
 
 type User = {
   token: string;
+  role?: string;
 };
 
 type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
+  loading: boolean;
   login: (token: string) => void;
   logout: () => void;
 };
@@ -27,6 +29,8 @@ export function AuthProvider({
   const [user, setUser] =
     useState<User | null>(null);
 
+  const [loading, setLoading] = useState(true);
+
   // Carrega token salvo
   useEffect(() => {
 
@@ -40,7 +44,7 @@ export function AuthProvider({
       });
 
     }
-
+    setLoading(false);
   }, []);
 
   function login(token: string) {
@@ -68,11 +72,9 @@ export function AuthProvider({
     <AuthContext.Provider
       value={{
         user,
-
         isAuthenticated: !!user,
-
+        loading,
         login,
-
         logout,
       }}
     >

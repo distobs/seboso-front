@@ -4,7 +4,6 @@ import type { LoginData, SignupData } from "../types/auth"; // Importa os tipos 
 type LoginResponse = {
   success: boolean;
   message?: string;
-  token?: string;
 };
 
 export async function loginUser(
