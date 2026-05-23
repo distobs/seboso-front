@@ -28,12 +28,12 @@ export default function Login() {
         return;
       }
 
-      if (!response.token) {
+      if (!response.message) {
         setError("Token de autenticação não recebido");
         return;
       }
 
-      authLogin(response.token);
+      authLogin(response.message);
       console.log("Login bem-sucedido!");
       navigate("/dashboard"); // Redireciona para o dashboard após login bem-sucedido
     } catch (err) {
