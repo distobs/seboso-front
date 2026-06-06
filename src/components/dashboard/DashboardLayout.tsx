@@ -1,26 +1,25 @@
-import type { ReactNode } from "react";
-import DashboardHeader from "./DashboardHeader";
+import Header from "../layout/Header";
 import DashboardSidebar from "./DashboardSidebar";
 
-type LayoutProps = {
-  children: ReactNode;
-  pageTitle: string;
+type Props = {
+  children: React.ReactNode;
   location: string;
 };
 
 export default function DashboardLayout({
   children,
-  pageTitle,
   location,
-}: LayoutProps) {
+}: Props) {
   return (
     <div className="min-h-screen bg-[#F5F5F5]">
-      <DashboardHeader location={location} />
+      <Header location={location} />
 
       <div className="flex">
-        <DashboardSidebar pageTitle={pageTitle} />
+        <DashboardSidebar />
 
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6">
+          {children}
+        </main>
       </div>
     </div>
   );

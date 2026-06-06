@@ -6,34 +6,18 @@ type ProtectedRouteProps = {
   allowedRoles?: string[];
 };
 
-export default function ProtectedRoute({children,allowedRoles,}: ProtectedRouteProps) {
+export default function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
+  const { isAuthenticated, user } = useAuth();
 
-  const {isAuthenticated,user,loading} = useAuth();
-
-  // Espera autenticação carregar
-  if (loading) {
-    return <p>Carregando...</p>;
-  }
-
-  // Usuário não autenticado
+  // Redireciona se o usuário não estiver autenticado
   if (!isAuthenticated) {
-
-    return (
-      <Navigate
-        to="/login"
-        replace
-      />
-    );
+    return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles && (user?.role || !allowedRoles.includes(user.role))) {
-    return (
-      <Navigate
-        to="/"
-        replace
-      />
-    );
+  // Redireciona se a rota exigir regras específicas e o usuário não as possuir
+  if (allowedRoles && (!user?.role || !allowedRoles.includes(user.role))) {
+    return <Navigate to="/" replace />;
   }
 
-  return children;
+  return <>{children}</>;
 }
