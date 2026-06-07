@@ -1,8 +1,8 @@
-import { Link, useNavigate } from "react-router-dom"; // Importa o Link e useNavigate do react-router-dom para criar links de navegação e programaticamente navegar entre as páginas do aplicativo
-import { ArrowLeft } from "lucide-react"; // Importa o ícone ArrowLeft da biblioteca lucide-react para usar como ícone de voltar na página de login
+import { Link, useNavigate } from "react-router-dom"; // Importa o Link e useNavigate do react-router-dom para criar links de navegação
+import { ArrowLeft } from "lucide-react"; 
 import { useState } from "react"; // Importa o hook useState do React para gerenciar o estado dos campos de email e senha no formulário de login
-import { loginUser } from "../../services/auth.service"; // Importa a função loginUser do serviço de autenticação para realizar a requisição de login à API quando o formulário for submetido
-import { useAuth } from "../../hooks/useAuth"; /// Importa o hook useAuth do contexto de autenticação para acessar as funções de login e logout e o estado do usuário autenticado no aplicativo
+import { loginUser } from "../../services/auth.service"; // Importa a função loginUser do serviço de autenticação 
+import { useAuth } from "../../hooks/useAuth"; /// Importa o hook useAuth do contexto de autenticação 
 
 export default function Login() {
   const navigate = useNavigate(); // Hook do React Router para programaticamente navegar entre as páginas do aplicativo
@@ -28,15 +28,16 @@ export default function Login() {
         return;
       }
 
-      if (!response.message) {
+      const token = response.message
+
+      if (!token) {
         setError("Token de autenticação não recebido");
         return;
       }
 
-      authLogin(response.message);
-      console.log("Login bem-sucedido!");
-      console.log(localStorage.getItem("token"));
-      navigate("/"); // Navega para a página inicial após o login bem-sucedido
+      await authLogin(token);
+      
+      navigate("/"); 
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro no login");
       console.error("Erro no login:", err);

@@ -17,9 +17,6 @@ export default function Home() {
     async function fetchStores() {
       try {
         const data = await getStores();
-
-        console.log("Sebos carregados:", data);
-
         setStores(data);
       } catch {
         setError("Erro ao carregar sebos: ");

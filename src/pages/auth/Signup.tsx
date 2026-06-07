@@ -1,6 +1,6 @@
 import { useState } from "react"; 
 import { Link, useNavigate } from "react-router-dom"; 
-import {signupUser} from "../../services/auth.service";
+import {signupUser} from "../../services/auth.service"; // Importa a função signupUser do serviço de autenticação para realizar a requisição de criação de conta à API 
 import { ArrowLeft } from "lucide-react"; 
 
 export default function Signup() {

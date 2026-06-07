@@ -13,7 +13,9 @@ export async function api<T>(
   options: RequestOptions = {},
 ): Promise<T> {
   // Configurações padrão para a requisição
-  const { method = "GET", body, token } = options;
+  const { method = "GET", body,} = options;
+
+  const token = localStorage.getItem("token");
 
   // Configura os headers, incluindo o token de autenticação se fornecido
   const headers: HeadersInit = {

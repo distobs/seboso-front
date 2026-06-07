@@ -17,7 +17,6 @@ export default function Books() {
 
       try {
         const booksData = await getBooks();
-        console.log("Livros carregados:", booksData);
         setBooks(booksData);
       } catch {
         setError("Erro ao buscar livros.");

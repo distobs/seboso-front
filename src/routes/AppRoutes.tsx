@@ -27,9 +27,27 @@ import EmployeeEdit from "../pages/dashboard/employees/EmployeeEdit";
 import UsersList from "../pages/dashboard/users/UsersList";
 import UserEdit from "../pages/dashboard/users/UserEdit";
 
-function DashboardPage({children,location,}: {children: React.ReactNode;location: string;}) {
+// Componente para páginas do dashboard, que precisam de autenticação e layout específico
+function DashboardPage({
+  children,
+  location,
+  allowAdmin,
+  allowOwner,
+  allowEmployee,
+}: {
+  children: React.ReactNode;
+  location: string;
+
+  allowAdmin?: boolean;
+  allowOwner?: boolean;
+  allowEmployee?: boolean;
+}) {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute
+      allowAdmin={allowAdmin}
+      allowOwner={allowOwner}
+      allowEmployee={allowEmployee}
+    >
       <DashboardLayout location={location}>
         {children}
       </DashboardLayout>
@@ -79,21 +97,21 @@ export default function AppRoutes() {
 
       {/* Livros */}
       <Route path="/dashboard/books" element={
-          <DashboardPage location={location}>
+          <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
             <BooksList />
           </DashboardPage>
         }
       />
 
       <Route path="/dashboard/books/create" element={
-          <DashboardPage location={location}>
+          <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
             <BookCreate />
           </DashboardPage>
         }
       />
 
       <Route path="/dashboard/books/:id/edit" element={
-          <DashboardPage location={location}>
+          <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
             <BookEdit />
           </DashboardPage>
         }
@@ -101,14 +119,14 @@ export default function AppRoutes() {
 
       {/* Sebo */}
       <Route path="/dashboard/store" element={
-          <DashboardPage location={location}>
+          <DashboardPage location={location} allowAdmin allowOwner>
             <StoreInfo />
           </DashboardPage>
         }
       />
 
       <Route path="/dashboard/store/edit" element={
-          <DashboardPage location={location}>
+          <DashboardPage location={location} allowAdmin allowOwner>
             <StoreEdit />
           </DashboardPage>
         }
@@ -116,14 +134,14 @@ export default function AppRoutes() {
 
       {/* Funcionários */}
       <Route path="/dashboard/employees" element={
-          <DashboardPage location={location}>
+          <DashboardPage location={location} allowAdmin allowOwner >
             <EmployeesList />
           </DashboardPage>
         }
       />
 
       <Route path="/dashboard/employees/:id/edit" element={
-          <DashboardPage location={location}>
+          <DashboardPage location={location} allowAdmin allowOwner>
             <EmployeeEdit />
           </DashboardPage>
         }
@@ -131,14 +149,14 @@ export default function AppRoutes() {
 
       {/* Usuários (Admin) */}
       <Route path="/dashboard/users" element={
-          <DashboardPage location={location}>
+          <DashboardPage location={location} allowAdmin>
             <UsersList />
           </DashboardPage>
         }
       />
 
       <Route path="/dashboard/users/:id/edit" element={
-          <DashboardPage location={location}>
+          <DashboardPage location={location} allowAdmin>
             <UserEdit />
           </DashboardPage>
         }
