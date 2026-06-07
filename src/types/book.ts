@@ -1,16 +1,18 @@
-export type Book = {
-  id: string;
+export interface Book {
+  id: number;
   title: string;
-  description: string;
-  launched_at: string;
-  cover_type: string;
   author: string;
-  edition: string;
-  language: string;
-  genre: string;
-  isbn_10_code: string;
-  isbn_13_code: string;
-  publisher: string;
-  pages: number;
-  dimentions: string;
-};
+  description: string | null;
+  published_at: string | null;
+  isbn_10_code: string | null;
+  isbn_13_code: string | null;
+  cover_type: string | null;
+  edition: string | null;
+  language: string | null;
+  genre: string | null;
+  publisher: string | null;
+  pages: number | null;
+  dimensions: string | null;
+  created_at: string;
+  updated_at: string;
+}

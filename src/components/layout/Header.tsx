@@ -74,7 +74,9 @@ function TopBar({
 
 // Navegação
 function NavBar() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user, isAdmin } = useAuth();
+
+  const hasDashboardAccess = isAdmin || (user?.stores && user.stores.length > 0);
 
   return (
     <nav className="bg-[#A85F42] px-6 py-3">
@@ -96,7 +98,7 @@ function NavBar() {
           </li>
         ))}
 
-        {isAuthenticated && (
+        {isAuthenticated && hasDashboardAccess && (
           <li>
             <NavLink
               to="/dashboard"

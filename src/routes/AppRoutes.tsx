@@ -118,14 +118,14 @@ export default function AppRoutes() {
       />
 
       {/* Sebo */}
-      <Route path="/dashboard/store" element={
+      <Route path="/dashboard/stores" element={
           <DashboardPage location={location} allowAdmin allowOwner>
             <StoreInfo />
           </DashboardPage>
         }
       />
 
-      <Route path="/dashboard/store/edit" element={
+      <Route path="/dashboard/stores/edit" element={
           <DashboardPage location={location} allowAdmin allowOwner>
             <StoreEdit />
           </DashboardPage>

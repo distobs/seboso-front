@@ -11,6 +11,7 @@ type JwtPayload = {
 export type UserStore = {
   store_id: number;
   role: string;
+  user_id: number;
 };
 
 export type User = {
@@ -43,5 +44,7 @@ export type AuthContextType = {
   isEmployee: boolean;
 };
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 export { buildUser };

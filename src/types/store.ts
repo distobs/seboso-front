@@ -1,13 +1,13 @@
-export type Store = {
-  id: string;
+export interface Store {
+  id: number;
   name: string;
   cnpj: string;
   street: string;
-  number: string;
+  number: number; 
   city: string;
-  city_block: string;
   state: string;
+  city_block: string;
   cep: string;
-  
-  createdAt?: string;
-};
+  created_at: string;
+  updated_at: string;
+}
