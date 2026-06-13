@@ -1,11 +1,11 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 type RequestOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
   body?: unknown;
   token?: string;
 };
- // Função genérica para fazer requisições à API, centralizando a lógica de autenticação e tratamento de erros
+
 export async function api<T>(
   endpoint: string,
   options: RequestOptions = {},
@@ -13,18 +13,22 @@ export async function api<T>(
   const { method = "GET", body } = options;
   const token = localStorage.getItem("token");
 
-  // Construção dos headers usando a classe Headers, que é mais robusta e fácil de manipular
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
-  // Adiciona o token de autenticação se estiver presente
   if (token) {
     headers.append("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
+  // Limpeza e construção segura da URL para evitar erros comuns de concatenação
+  const cleanBaseUrl = API_URL.endsWith("/") ? API_URL.slice(0, -1) : API_URL;
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  
+  const fullUrl = `${cleanBaseUrl}${cleanEndpoint}`;
+
+  const response = await fetch(fullUrl, {
     method,
-    headers, // ◄ O fetch aceita instâncias de Headers perfeitamente
+    headers, 
     body: body ? JSON.stringify(body) : undefined,
   });
 

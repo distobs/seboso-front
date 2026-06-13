@@ -14,17 +14,15 @@ export default function BookEdit() {
   const navigate = useNavigate();
 
   const [book, setBook] = useState<Book | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(Boolean(id));
 
   useEffect(() => {
     async function loadBook() {
       if (!id) {
-        setLoading(false);
         return;
       }
 
       try {
-        setLoading(true);
         const data = await getBookById(Number(id));
         setBook(data);
       } catch (error) {
@@ -37,7 +35,7 @@ export default function BookEdit() {
     loadBook();
   }, [id]);
 
-  // 
+  //
   async function handleUpdate(data: CreateBookInput) {
     try {
       if (!id) return;
@@ -69,9 +67,12 @@ export default function BookEdit() {
     return (
       <div className="max-w-md mx-auto my-16 text-center bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
         <BookOpen className="mx-auto text-gray-300 mb-3" size={40} />
-        <h2 className="text-xl font-bold text-gray-800">Livro não encontrado</h2>
+        <h2 className="text-xl font-bold text-gray-800">
+          Livro não encontrado
+        </h2>
         <p className="text-gray-500 text-sm mt-1 mb-6">
-          O exemplar que você está tentando editar não foi localizado no catálogo.
+          O exemplar que você está tentando editar não foi localizado no
+          catálogo.
         </p>
         <button
           onClick={() => navigate("/dashboard/books")}
@@ -92,7 +93,8 @@ export default function BookEdit() {
           Editar Livro
         </h1>
         <p className="text-xs font-medium text-gray-500 mt-0.5">
-          Modifique os metadados, identificações e sinopse de <span className="font-bold text-gray-700">{book.title}</span>
+          Modifique os metadados, identificações e sinopse de{" "}
+          <span className="font-bold text-gray-700">{book.title}</span>
         </p>
       </div>
 

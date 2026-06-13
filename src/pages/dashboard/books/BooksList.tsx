@@ -33,7 +33,9 @@ export default function BooksList() {
 
     try {
       await deleteBook(bookToDelete);
-      setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookToDelete));
+      setBooks((prevBooks) =>
+        prevBooks.filter((book) => book.id !== bookToDelete),
+      );
     } catch (error) {
       console.error("Erro ao excluir livro:", error);
     } finally {
@@ -46,7 +48,6 @@ export default function BooksList() {
 
     async function loadBooks() {
       try {
-        setLoading(true);
         const data = await getBooks();
         if (active) {
           setBooks(data);
@@ -81,7 +82,10 @@ export default function BooksList() {
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
           <div className="h-12 bg-gray-50 border-b border-gray-100" />
           {[1, 2, 3, 4].map((n) => (
-            <div key={n} className="p-5 flex items-center justify-between border-b border-gray-50">
+            <div
+              key={n}
+              className="p-5 flex items-center justify-between border-b border-gray-50"
+            >
               <div className="flex items-center gap-4 w-1/3">
                 <div className="w-9 h-12 bg-gray-200 rounded-md shrink-0" />
                 <div className="space-y-2 flex-1">
@@ -103,9 +107,15 @@ export default function BooksList() {
       {/* Cabeçalho */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-black text-gray-900 tracking-tight">Gerenciar Livros</h1>
+          <h1 className="text-2xl font-black text-gray-900 tracking-tight">
+            Gerenciar Livros
+          </h1>
           <p className="text-xs font-medium text-gray-500 mt-0.5">
-            {books.length} {books.length === 1 ? "exemplar registrado" : "exemplares registrados"} no catálogo total
+            {books.length}{" "}
+            {books.length === 1
+              ? "exemplar registrado"
+              : "exemplares registrados"}{" "}
+            no catálogo total
           </p>
         </div>
 
@@ -153,9 +163,12 @@ export default function BooksList() {
             <AlertTriangle size={28} />
           </div>
 
-          <h3 className="text-lg font-bold text-gray-900">Remover do Catálogo?</h3>
+          <h3 className="text-lg font-bold text-gray-900">
+            Remover do Catálogo?
+          </h3>
           <p className="text-sm text-gray-500 mt-2 leading-relaxed">
-            Esta ação removerá permanentemente o livro selecionado das buscas integradas e registros associados.
+            Esta ação removerá permanentemente o livro selecionado das buscas
+            integradas e registros associados.
           </p>
 
           <div className="grid grid-cols-2 gap-3 w-full mt-6">

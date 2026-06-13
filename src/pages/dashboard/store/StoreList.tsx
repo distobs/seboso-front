@@ -2,12 +2,19 @@ import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { getStores, deleteStore } from "../../../services/store.service";
 import type { Store } from "../../../types/store";
-import { Pencil, Trash2, Store as StoreIcon, Plus, MapPin, AlertTriangle } from "lucide-react";
+import {
+  Pencil,
+  Trash2,
+  Store as StoreIcon,
+  Plus,
+  MapPin,
+  AlertTriangle,
+} from "lucide-react";
 
 export default function StoresList() {
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Estado e referência para gerenciar o modal customizado de exclusão
   const [storeToDelete, setStoreToDelete] = useState<number | null>(null);
   const deleteModalRef = useRef<HTMLDialogElement>(null);
@@ -15,7 +22,6 @@ export default function StoresList() {
   useEffect(() => {
     async function loadStores() {
       try {
-        setLoading(true);
         const data = await getStores();
         setStores(data);
       } catch (error) {
@@ -46,10 +52,14 @@ export default function StoresList() {
 
     try {
       await deleteStore(storeToDelete);
-      setStores((current) => current.filter((store) => store.id !== storeToDelete));
+      setStores((current) =>
+        current.filter((store) => store.id !== storeToDelete),
+      );
     } catch (error) {
       console.error("Erro ao deletar sebo:", error);
-      alert("Não foi possível excluir o sebo. Verifique se ele possui livros vinculados.");
+      alert(
+        "Não foi possível excluir o sebo. Verifique se ele possui livros vinculados.",
+      );
     } finally {
       closeModal();
     }
@@ -67,7 +77,10 @@ export default function StoresList() {
         </div>
         <div className="bg-white rounded-2xl border border-gray-100 divide-y divide-gray-100 overflow-hidden shadow-sm">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="p-5 flex justify-between items-center animate-pulse">
+            <div
+              key={n}
+              className="p-5 flex justify-between items-center animate-pulse"
+            >
               <div className="flex items-center gap-4 w-1/2">
                 <div className="w-10 h-10 bg-gray-200 rounded-xl" />
                 <div className="space-y-2 flex-1">
@@ -91,9 +104,13 @@ export default function StoresList() {
       {/* Cabeçalho */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-black text-gray-900 tracking-tight">Gerenciar Sebos</h1>
+          <h1 className="text-2xl font-black text-gray-900 tracking-tight">
+            Gerenciar Sebos
+          </h1>
           <p className="text-xs font-medium text-gray-500 mt-0.5">
-            {stores.length} {stores.length === 1 ? "sebo cadastrado" : "sebos cadastrados"} no ecossistema
+            {stores.length}{" "}
+            {stores.length === 1 ? "sebo cadastrado" : "sebos cadastrados"} no
+            ecossistema
           </p>
         </div>
 
@@ -113,9 +130,12 @@ export default function StoresList() {
             <div className="p-4 bg-gray-50 rounded-2xl text-gray-300 mb-4 border border-gray-100">
               <StoreIcon size={32} />
             </div>
-            <p className="font-bold text-gray-800 text-lg">Nenhum sebo cadastrado</p>
+            <p className="font-bold text-gray-800 text-lg">
+              Nenhum sebo cadastrado
+            </p>
             <p className="text-sm text-gray-400 mt-1 mb-6 leading-relaxed">
-              Você ainda não gerencia estabelecimentos. Crie seu primeiro ponto de venda agora mesmo.
+              Você ainda não gerencia estabelecimentos. Crie seu primeiro ponto
+              de venda agora mesmo.
             </p>
             <Link
               to="/dashboard/stores/create"
@@ -137,7 +157,9 @@ export default function StoresList() {
                     <StoreIcon size={18} />
                   </div>
                   <div className="min-w-0">
-                    <h2 className="font-bold text-gray-800 text-base truncate group-hover:text-[#C37351] transition-colors">{store.name}</h2>
+                    <h2 className="font-bold text-gray-800 text-base truncate group-hover:text-[#C37351] transition-colors">
+                      {store.name}
+                    </h2>
                     <p className="text-xs font-semibold text-gray-400 mt-1 flex items-center gap-1">
                       <MapPin size={12} className="text-gray-300" />
                       {store.city} — {store.state}
@@ -187,10 +209,13 @@ export default function StoresList() {
           <div className="p-3 bg-red-50 text-red-500 rounded-2xl mb-4 border border-red-100">
             <AlertTriangle size={28} />
           </div>
-          
-          <h3 className="text-lg font-bold text-gray-900">Excluir estabelecimento?</h3>
+
+          <h3 className="text-lg font-bold text-gray-900">
+            Excluir estabelecimento?
+          </h3>
           <p className="text-sm text-gray-500 mt-2 leading-relaxed">
-            Esta ação é permanente. Todos os dados associados a este sebo serão removidos do catálogo de buscas públicas.
+            Esta ação é permanente. Todos os dados associados a este sebo serão
+            removidos do catálogo de buscas públicas.
           </p>
 
           <div className="grid grid-cols-2 gap-3 w-full mt-6">

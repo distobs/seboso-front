@@ -29,6 +29,7 @@ import StoreSettings from "../pages/dashboard/store/StoreSettings";
 
 import EmployeesList from "../pages/dashboard/employees/EmployeesList";
 import EmployeeEdit from "../pages/dashboard/employees/EmployeeEdit";
+import EmployeeCreate from "../pages/dashboard/employees/EmployeeCreate";
 
 import UsersList from "../pages/dashboard/users/UsersList";
 import UserEdit from "../pages/dashboard/users/UserEdit";
@@ -159,6 +160,14 @@ export default function AppRoutes() {
       <Route path="/dashboard/stores/:id/employees" element={
           <DashboardPage location={location} allowAdmin allowOwner>
             <EmployeesList />
+          </DashboardPage>
+        }
+      />
+
+      {/* RESTRITO (Admin/Owner): Formulário estruturado para adicionar um novo funcionário ao sebo */}
+      <Route path="/dashboard/stores/:id/employees/create" element={
+          <DashboardPage location={location} allowAdmin allowOwner>
+            <EmployeeCreate />
           </DashboardPage>
         }
       />

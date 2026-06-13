@@ -17,17 +17,15 @@ export default function StoreEdit() {
   const navigate = useNavigate();
 
   const [store, setStore] = useState<Store | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(Boolean(id));
 
   useEffect(() => {
     async function loadStore() {
       if (!id) {
-        setLoading(false);
         return;
       }
 
       try {
-        setLoading(true);
         const data = await getStoreById(Number(id));
         setStore(data);
       } catch (error) {
@@ -48,7 +46,9 @@ export default function StoreEdit() {
       navigate("/dashboard/stores");
     } catch (error) {
       console.error("Erro ao atualizar sebo:", error);
-      alert("Ocorreu um erro ao tentar salvar as alterações do estabelecimento.");
+      alert(
+        "Ocorreu um erro ao tentar salvar as alterações do estabelecimento.",
+      );
     }
   }
 
@@ -73,7 +73,8 @@ export default function StoreEdit() {
         <StoreIcon className="mx-auto text-gray-300 mb-3" size={40} />
         <h2 className="text-xl font-bold text-gray-800">Sebo não encontrado</h2>
         <p className="text-gray-500 text-sm mt-1 mb-6">
-          O estabelecimento que você está tentando editar não foi localizado no sistema.
+          O estabelecimento que você está tentando editar não foi localizado no
+          sistema.
         </p>
         <button
           onClick={() => navigate("/dashboard/stores")}
@@ -85,19 +86,20 @@ export default function StoreEdit() {
     );
   }
 
-    return (
-        <div className="w-full max-w-full px-4 lg:px-8 space-y-6">
-        {/* Título unificado e limpo */}
-        <div>
-            <h1 className="text-2xl font-black text-gray-900 tracking-tight">
-            Editar Sebo
-            </h1>
-            <p className="text-xs font-medium text-gray-500 mt-0.5">
-            Modifique as informações cadastrais e de localização de <span className="font-bold text-gray-700">{store.name}</span>
-            </p>
-        </div>
+  return (
+    <div className="w-full max-w-full px-4 lg:px-8 space-y-6">
+      {/* Título unificado e limpo */}
+      <div>
+        <h1 className="text-2xl font-black text-gray-900 tracking-tight">
+          Editar Sebo
+        </h1>
+        <p className="text-xs font-medium text-gray-500 mt-0.5">
+          Modifique as informações cadastrais e de localização de{" "}
+          <span className="font-bold text-gray-700">{store.name}</span>
+        </p>
+      </div>
 
-        <StoreForm initialData={store} onSubmit={handleUpdate} />
-        </div>
-    );
+      <StoreForm initialData={store} onSubmit={handleUpdate} />
+    </div>
+  );
 }
