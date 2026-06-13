@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { useUserLocation } from "../hooks/useUserLocation";
 import ProtectedRoute from "./ProtectedRoute";
 
+import Header from "../components/layout/Header";
 import Layout from "../components/layout/Layout";
 import DashboardLayout from "../components/dashboard/DashboardLayout";
 
@@ -98,9 +99,10 @@ export default function AppRoutes() {
 
       {/* PÚBLICO: Página institucional com informações sobre a plataforma */}
       <Route path="/about" element={
-          <Layout pageTitle="Sobre" location={location}>
+          <>
+            <Header/>
             <About />
-          </Layout>
+          </>
         }
       />
       
