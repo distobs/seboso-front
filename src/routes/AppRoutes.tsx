@@ -62,7 +62,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       
-      {/* Home */}
+      {/* PÚBLICO: Página inicial que lista os sebos parceiros da plataforma */}
       <Route path="/" element={
           <Layout pageTitle="Sebo" location={location}>
             <Home />
@@ -70,7 +70,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Books List (Public) */}
+      {/* PÚBLICO: Catálogo geral e aberto de livros cadastrados no sistema */}
       <Route path="/books" element={
           <Layout pageTitle="Livros" location={location}>
             <Books />
@@ -78,7 +78,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* About */}
+      {/* PÚBLICO: Página institucional com informações sobre a plataforma */}
       <Route path="/about" element={
           <Layout pageTitle="Sobre" location={location}>
             <About />
@@ -86,14 +86,14 @@ export default function AppRoutes() {
         }
       />
       
-      {/* Login */}
+      {/* AUTENTICAÇÃO: Tela de login para usuários e gestores */}
       <Route path="/login" element={<Login />} />
       
-      {/* Signup */}
+      {/* AUTENTICAÇÃO: Tela de cadastro de novos usuários */}
       <Route path="/signup" element={<Signup />} />
 
       
-      {/* Dashboard Home */}
+      {/* DASHBOARD: Página inicial do painel (visão geral customizada por usuário) */}
       <Route path="/dashboard" element={
           <DashboardPage location={location}>
             <DashboardHome />
@@ -101,7 +101,7 @@ export default function AppRoutes() {
         }
       />
       
-      {/* Books List */}
+      {/* ADMIN GLOBAL: Lista de controle com todos os livros do banco de dados */}
       <Route path="/dashboard/books" element={
           <DashboardPage location={location} allowAdmin>
             <BooksList />
@@ -109,7 +109,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Book Create */}
+      {/* RESTRITO (Admin/Owner/Employee): Formulário para registrar um novo livro na base de dados global */}
       <Route path="/dashboard/books/create" element={
           <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
             <BookCreate />
@@ -117,7 +117,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Book Edit */}
+      {/* RESTRITO (Admin/Owner/Employee): Tela para editar os metadados de um livro específico */}
       <Route path="/dashboard/books/:id/edit" element={
           <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
             <BookEdit />
@@ -125,7 +125,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* 1. Gerenciamento de Catálogo do Sebo */}
+      {/* RESTRITO (Admin/Owner/Employee): Gerencia o acervo local e estoque de um sebo específico */}
       <Route path="/dashboard/stores/:id/catalog" element={
           <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
             <StoreCatalog />
@@ -133,7 +133,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* 2. Gerenciamento de Funcionários Específicos do Sebo (Ajustado) */}
+      {/* RESTRITO (Admin/Owner): Lista e gerencia a equipe de funcionários contratados de um sebo */}
       <Route path="/dashboard/stores/:id/employees" element={
           <DashboardPage location={location} allowAdmin allowOwner>
             <EmployeesList />
@@ -141,15 +141,15 @@ export default function AppRoutes() {
         }
       />
 
-      {/* 3. Dados / Configurações do Sebo (Novo Mapeamento) */}
+      {/* RESTRITO (Admin/Owner/Employee): Edita os dados cadastrais (endereço, telefone) do sebo contextualizado */}
       <Route path="/dashboard/stores/:id/settings" element={
           <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
-            <StoreEdit /> {/* Reaproveitando o formulário de edição de dados */}
+            <StoreEdit />
           </DashboardPage>
         }
       />
 
-      {/* Stores List (Admin Global) */}
+      {/* ADMIN GLOBAL: Lista mestre com todos os sebos integrados na plataforma */}
       <Route path="/dashboard/stores" element={
           <DashboardPage location={location} allowAdmin>
             <StoreInfo /> 
@@ -157,7 +157,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Store Info / Catalog List */}
+      {/* RESTRITO (Admin/Owner/Employee): Exibe informações detalhadas e perfil interno de um sebo específico */}
       <Route path="/dashboard/stores/:id" element={
           <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
             <StoreInfo />
@@ -165,7 +165,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Store Edit (Rota global antiga mantida por retrocompatibilidade) */}
+      {/* RESTRITO (Admin/Owner): Rota alternativa direta para editar dados do sebo por ID */}
       <Route path="/dashboard/stores/:id/edit" element={
           <DashboardPage location={location} allowAdmin allowOwner>
             <StoreEdit />
@@ -173,7 +173,7 @@ export default function AppRoutes() {
         }
       />
       
-      {/* Edição de Funcionários Individual (Contextualizado) */}
+      {/* RESTRITO (Admin/Owner): Formulário estruturado para atualizar os dados de um funcionário de um sebo */}
       <Route path="/dashboard/stores/:storeId/employees/:id/edit" element={
           <DashboardPage location={location} allowAdmin allowOwner>
             <EmployeeEdit />
@@ -181,7 +181,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Rota Fallback antiga para lista geral de funcionários (opcional manter) */}
+      {/* FALLBACK (Admin/Owner): Rota antiga genérica para listar funcionários (mantida por segurança) */}
       <Route path="/dashboard/employees" element={
           <DashboardPage location={location} allowAdmin allowOwner >
             <EmployeesList />
@@ -189,6 +189,7 @@ export default function AppRoutes() {
         }
       />
 
+      {/* FALLBACK (Admin/Owner): Rota antiga genérica para editar funcionários por ID básico */}
       <Route path="/dashboard/employees/:id/edit" element={
           <DashboardPage location={location} allowAdmin allowOwner>
             <EmployeeEdit />
@@ -196,7 +197,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Gerenciamento Global de Usuários */}
+      {/* ADMIN GLOBAL: Painel de controle e listagem de todos os usuários cadastrados no sistema */}
       <Route path="/dashboard/users" element={
           <DashboardPage location={location} allowAdmin>
             <UsersList />
@@ -204,7 +205,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* User Edit */}
+      {/* ADMIN GLOBAL: Tela para gerenciar permissões e dados cadastrais de qualquer usuário */}
       <Route path="/dashboard/users/:id/edit" element={
           <DashboardPage location={location} allowAdmin>
             <UserEdit />
