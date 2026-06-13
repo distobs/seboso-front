@@ -1,7 +1,8 @@
 export default function StoreEdit() {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">Edit Store</h1>
-    </div>
-  );
+    return (
+        <div className="p-6">
+            <h1>Store Edit</h1>
+            <p>Aqui você pode editar as informações da sua loja.</p>
+        </div>
+    );
 }

@@ -6,9 +6,10 @@ import Layout from "../components/layout/Layout";
 import DashboardLayout from "../components/dashboard/DashboardLayout";
 
 import Home from "../pages/public/Home";
+import StoreDetails from "../pages/public/stores/StoreDetails";
 import Books from "../pages/public/Books";
 import About from "../pages/public/About";
-
+import BookDetails from "../pages/public/books/BookDetails";
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
 
@@ -19,8 +20,11 @@ import BookCreate from "../pages/dashboard/books/BookCreate";
 import BookEdit from "../pages/dashboard/books/BookEdit";
 
 import StoreCatalog from "../pages/dashboard/store/StoreCatalog";
-import StoreInfo from "../pages/dashboard/store/StoreInfo";
 import StoreEdit from "../pages/dashboard/store/StoreEdit";
+import StoreList from "../pages/dashboard/store/StoreList";
+import StoreCreate from "../pages/dashboard/store/StoreCreate";
+import StoreDashboard from "../pages/dashboard/store/StoreDashboard";
+import StoreSettings from "../pages/dashboard/store/StoreSettings";
 
 import EmployeesList from "../pages/dashboard/employees/EmployeesList";
 import EmployeeEdit from "../pages/dashboard/employees/EmployeeEdit";
@@ -70,10 +74,24 @@ export default function AppRoutes() {
         }
       />
 
+      <Route path="/stores/:id" element={
+          <Layout pageTitle="Detalhes da Loja" location={location}>
+            <StoreDetails />
+          </Layout>
+        }
+      />
+
       {/* PÚBLICO: Catálogo geral e aberto de livros cadastrados no sistema */}
       <Route path="/books" element={
           <Layout pageTitle="Livros" location={location}>
             <Books />
+          </Layout>
+        }
+      />
+
+      <Route path="/books/:id" element={
+          <Layout pageTitle="Detalhes do Livro" location={location}>
+            <BookDetails />
           </Layout>
         }
       />
@@ -144,7 +162,7 @@ export default function AppRoutes() {
       {/* RESTRITO (Admin/Owner/Employee): Edita os dados cadastrais (endereço, telefone) do sebo contextualizado */}
       <Route path="/dashboard/stores/:id/settings" element={
           <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
-            <StoreEdit />
+            <StoreSettings />
           </DashboardPage>
         }
       />
@@ -152,7 +170,16 @@ export default function AppRoutes() {
       {/* ADMIN GLOBAL: Lista mestre com todos os sebos integrados na plataforma */}
       <Route path="/dashboard/stores" element={
           <DashboardPage location={location} allowAdmin>
-            <StoreInfo /> 
+            <StoreList/> 
+          </DashboardPage>
+        }
+      />
+
+      <Route
+        path="/dashboard/stores/create"
+        element={
+          <DashboardPage location={location} allowAdmin>
+            <StoreCreate />
           </DashboardPage>
         }
       />
@@ -160,7 +187,7 @@ export default function AppRoutes() {
       {/* RESTRITO (Admin/Owner/Employee): Exibe informações detalhadas e perfil interno de um sebo específico */}
       <Route path="/dashboard/stores/:id" element={
           <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
-            <StoreInfo />
+            <StoreDashboard />
           </DashboardPage>
         }
       />
@@ -189,13 +216,6 @@ export default function AppRoutes() {
         }
       />
 
-      {/* FALLBACK (Admin/Owner): Rota antiga genérica para editar funcionários por ID básico */}
-      <Route path="/dashboard/employees/:id/edit" element={
-          <DashboardPage location={location} allowAdmin allowOwner>
-            <EmployeeEdit />
-          </DashboardPage>
-        }
-      />
 
       {/* ADMIN GLOBAL: Painel de controle e listagem de todos os usuários cadastrados no sistema */}
       <Route path="/dashboard/users" element={
