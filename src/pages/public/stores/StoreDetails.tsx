@@ -1,24 +1,39 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { getStoreById } from "../../../services/store.service";
+import { listCatalogByStore } from "../../../services/book.service";
 
 import type { Store } from "../../../types/store";
+import type { CatalogItem } from "../../../types/catalog";
+
+import StoreInfoCard from "../../../components/store/StoreInfoCard";
+import CatalogBookCard from "../../../components/store/CatalogBookCard";
+import { BookOpen, ArrowLeft, Store as StoreIcon } from "lucide-react";
 
 export default function StoreDetails() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate(); // 🟢 Para o botão voltar funcionar dinamicamente
 
   const [store, setStore] = useState<Store | null>(null);
+  const [catalog, setCatalog] = useState<CatalogItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadStore() {
+    async function loadData() {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        if (!id) return;
+        const [storeData, catalogData] = await Promise.all([
+          getStoreById(Number(id)),
+          listCatalogByStore(Number(id)),
+        ]);
 
-        const data = await getStoreById(Number(id));
-
-        setStore(data);
+        setStore(storeData);
+        setCatalog(catalogData);
       } catch (error) {
         console.error("Erro ao carregar sebo:", error);
       } finally {
@@ -26,89 +41,96 @@ export default function StoreDetails() {
       }
     }
 
-    loadStore();
+    loadData();
   }, [id]);
 
   if (loading) {
-    return <p>Carregando sebo...</p>;
+    return (
+      <div className="w-full px-8 py-8 animate-pulse">
+        <div className="grid lg:grid-cols-[400px_1fr] gap-8">
+          <div className="h-96 bg-gray-200 rounded-2xl" />
+          <div className="space-y-4">
+            <div className="h-16 bg-gray-200 rounded-2xl" />
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="h-40 bg-gray-200 rounded-2xl" />
+              <div className="h-40 bg-gray-200 rounded-2xl" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!store) {
-    return <p>Sebo não encontrado.</p>;
+    return (
+      <div className="max-w-md mx-auto my-16 text-center bg-white p-8 rounded-2xl border shadow-sm">
+        <StoreIcon className="mx-auto text-gray-300 mb-3" size={40} />
+        <h2 className="text-xl font-bold text-gray-800">Sebo não encontrado</h2>
+        <button onClick={() => navigate(-1)} className="mt-4 text-sm text-[#C37351] font-semibold underline">
+          Voltar para a página anterior
+        </button>
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50/50 to-white pb-16">
+      {/* Banner Superior de apoio integrado com o botão Voltar */}
+      <div className="bg-[#C37351]/10 border-b border-[#C37351]/5 py-4">
+        <div className="w-full px-4 sm:px-6 lg:px-12">
+          <button
+            onClick={() => navigate(-1)} // 🟢 Retorna para onde o usuário estava
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#A85F42] hover:text-[#C37351] bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md"
+          >
+            <ArrowLeft size={16} />
+            Voltar
+          </button>
+        </div>
+      </div>
 
-      {/* Cabeçalho */}
-      <section className="bg-white rounded-xl shadow p-6">
-        <h1 className="text-3xl font-bold">
-          {store.name}
-        </h1>
+      {/* 🟢 max-w-full e px-12 fazem com que o layout preencha a tela perfeitamente */}
+      <div className="w-full max-w-[100%] px-4 sm:px-6 lg:px-12 mt-6">
+        <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
+          
+          {/* Coluna da Esquerda: Dados do Sebo */}
+          <div>
+            <StoreInfoCard store={store} booksCount={catalog.length} />
+          </div>
 
-        <p className="text-gray-500 mt-2">
-          {store.city} - {store.state}
-        </p>
-      </section>
+          {/* Coluna da Direita: Catálogo Expandido */}
+          <div className="space-y-6">
+            
+            {/* Cabeçalho do Catálogo */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-orange-50 text-[#C37351] rounded-xl">
+                  <BookOpen size={20} />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">Catálogo Disponível</h2>
+                  <p className="text-xs text-gray-500 mt-0.5">Explore os acervos e exemplares físicos</p>
+                </div>
+              </div>
+            </div>
 
-      {/* Informações */}
-      <section className="bg-white rounded-xl shadow p-6">
-        <h2 className="text-xl font-semibold mb-4">
-          Informações do Sebo
-        </h2>
+            {catalog.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center shadow-sm">
+                <BookOpen className="mx-auto text-gray-300 mb-3" size={32} />
+                <h3 className="font-semibold text-gray-800">Acervo em atualização</h3>
+              </div>
+            ) : (
+              // 🟢 Grid redimensionado para expandir e ocupar 3 ou 4 colunas em telas ultra-wide
+              <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+                {catalog.map((item) => (
+                  <CatalogBookCard key={`${item.store_id}-${item.book_id}`} item={item} />
+                ))}
+              </div>
+            )}
 
-        <div className="space-y-2">
-
-          <p>
-            <strong>Rua:</strong> {store.street}
-          </p>
-
-          <p>
-            <strong>Número:</strong> {store.number}
-          </p>
-
-          <p>
-            <strong>Bairro:</strong> {store.city_block}
-          </p>
-
-          <p>
-            <strong>CEP:</strong> {store.cep}
-          </p>
-
-          <p>
-            <strong>Cidade:</strong> {store.city}
-          </p>
-
-          <p>
-            <strong>Estado:</strong> {store.state}
-          </p>
-
-          <p>
-            <strong>CNPJ:</strong> {store.cnpj}
-          </p>
+          </div>
 
         </div>
-      </section>
-
-      {/* Ações */}
-      <section className="flex gap-3">
-
-        <Link
-          to={`/stores/${store.id}/catalog`}
-          className="
-            px-5
-            py-2
-            rounded-lg
-            bg-[#C37351]
-            text-white
-            hover:bg-[#A85F42]
-          "
-        >
-          Ver Catálogo
-        </Link>
-
-      </section>
-
+      </div>
     </div>
   );
 }

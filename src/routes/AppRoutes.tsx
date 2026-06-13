@@ -76,11 +76,13 @@ export default function AppRoutes() {
       />
 
       <Route path="/stores/:id" element={
-          <Layout pageTitle="Detalhes da Loja" location={location}>
-            <StoreDetails />
-          </Layout>
+          <>
+            <Header location={location} />
+             <StoreDetails />
+          </>
         }
       />
+
 
       {/* PÚBLICO: Catálogo geral e aberto de livros cadastrados no sistema */}
       <Route path="/books" element={
