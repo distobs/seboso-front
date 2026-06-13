@@ -100,7 +100,7 @@ export default function AppRoutes() {
       {/* PÚBLICO: Página institucional com informações sobre a plataforma */}
       <Route path="/about" element={
           <>
-            <Header/>
+            <Header location={location} />
             <About />
           </>
         }
