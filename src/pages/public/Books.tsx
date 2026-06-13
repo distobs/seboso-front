@@ -1,61 +1,122 @@
-import { useState, useEffect} from "react"; // Importa os hooks useState e useEffect do React para gerenciar o estado dos livros e realizar a busca na API quando o componente for montado
-import BookCard from "../../components/ui/BookCard"; // Importa o componente BookCard para exibir as informações de cada livro na lista
-import type { Book } from "../../types/book"; // Importa o tipo Book para tipar o estado dos livros e as props do componente BookCard
-import { getBooks } from "../../services/book.service"; // Importa a função getBooks para buscar os livros na API
+import { useState, useEffect } from "react";
+import BookCard from "../../components/ui/BookCard";
+import type { Book } from "../../types/book";
+import { getBooks } from "../../services/book.service";
+import { BookOpen, AlertCircle, RefreshCw } from "lucide-react";
 
 export default function Books() {
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState("");
 
-  const [books, setBooks] = useState<Book[]>([]); // Estado para armazenar a lista de livros
-  const [loading, setLoading] = useState(true); // Estado para controlar o loading
-  const [error, setError] = useState(""); // Estado para armazenar mensagens de erro
+  // Função isolada para quando o usuário clicar em "Tentar Novamente"
+  async function handleRefresh() {
+    setLoading(true);
+    setError("");
+    try {
+      const booksData = await getBooks();
+      setBooks(booksData);
+    } catch (err) {
+      console.error(err);
+      setError("Não foi possível carregar o acervo de livros neste momento.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
+    let isMounted = true;
 
     async function fetchBooks() {
-      setLoading(true);
-      setError("");
-
       try {
         const booksData = await getBooks();
-        setBooks(booksData);
-      } catch {
-        setError("Erro ao buscar livros.");
+        if (isMounted) {
+          setBooks(booksData);
+        }
+      } catch (err) {
+        console.error("Erro ao carregar catálogo global:", err);
+        if (isMounted) {
+          setError("Não foi possível carregar o acervo de livros neste momento.");
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
 
     fetchBooks();
-  }, []);
+
+    return () => {
+      isMounted = false; // Cancela a atualização se o componente for desmontado no meio do fetch
+    };
+  }, []); // O array de dependências vazio garante que a busca ocorra apenas uma vez ao montar o componente
 
   if (loading) {
-    return <div className="text-center">Carregando...</div>;
+    return (
+      <div className="w-full space-y-6 animate-pulse">
+        <div className="h-8 bg-gray-100 rounded-xl w-48 mb-6" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+          <div className="h-80 bg-gray-100 rounded-2xl" />
+          <div className="h-80 bg-gray-100 rounded-2xl" />
+          <div className="h-80 bg-gray-100 rounded-2xl" />
+          <div className="h-80 bg-gray-100 rounded-2xl" />
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-center text-red-500">{error}</div>;
+    return (
+      <div className="max-w-md mx-auto my-16 text-center bg-white p-8 rounded-2xl border border-gray-100 shadow-xs">
+        <AlertCircle className="mx-auto text-red-400 mb-3" size={40} />
+        <h2 className="text-lg font-bold text-gray-800">Falha na conexão</h2>
+        <p className="text-gray-500 text-xs mt-1 mb-6">{error}</p>
+        <button
+          onClick={handleRefresh}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-[#C37351] hover:bg-[#A85F42] text-white text-xs font-bold rounded-xl shadow-xs transition-colors"
+        >
+          <RefreshCw size={14} /> Tentar novamente
+        </button>
+      </div>
+    );
   }
 
   return (
-    <>
-      <h1 className="text-2xl font-semibold mb-6">
-        Catálogo Geral
-      </h1>
-
-      <div className="
-        grid
-        grid-cols-1
-        md:grid-cols-2
-        xl:grid-cols-3
-        gap-4
-      ">
-        {books.map((books) => (
-          <BookCard
-            key={books.id}
-            book={books}
-          />
-        ))}
+    <div className="w-full space-y-6">
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-xs flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-orange-50 text-[#C37351] rounded-xl">
+            <BookOpen size={20} />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-gray-900 tracking-tight">
+              Catálogo Geral do Sistema
+            </h1>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Todos os títulos cadastrados e indexados na plataforma global
+            </p>
+          </div>
+        </div>
+        
+        <span className="text-xs font-bold text-gray-400 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 shrink-0">
+          {books.length} {books.length === 1 ? "título disponível" : "títulos disponíveis"}
+        </span>
       </div>
-    </>
+
+      {books.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center shadow-xs">
+          <BookOpen className="mx-auto text-gray-300 mb-3" size={32} />
+          <h3 className="font-semibold text-gray-800">Nenhum livro registrado</h3>
+          <p className="text-gray-400 text-xs mt-1">A base de dados global está vazia ou em manutenção.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+          {books.map((bookItem) => (
+            <BookCard key={bookItem.id} book={bookItem} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
