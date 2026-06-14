@@ -2,14 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { getStores, deleteStore } from "../../../services/store.service";
 import type { Store } from "../../../types/store";
-import {
-  Pencil,
-  Trash2,
-  Store as StoreIcon,
-  Plus,
-  MapPin,
-  AlertTriangle,
-} from "lucide-react";
+import {Pencil,Trash2,Store as StoreIcon,Plus,MapPin,AlertTriangle } from "lucide-react";
 
 export default function StoresList() {
   const [stores, setStores] = useState<Store[]>([]);

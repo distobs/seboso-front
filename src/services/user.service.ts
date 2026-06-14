@@ -1,7 +1,6 @@
 import { api } from "./api";
-import type { User } from "../types/user";
-
-export type UpdateUserInput = Partial<Omit<User, "id" | "created_at" | "updated_at">>;
+// Importa os tipos de usuário do arquivo central de tipos
+import type { User, CreateUserInput, UpdateUserInput } from "../types/user";
 
 // GET /users?page=<> & per_page=<> - Lista paginada de usuários (Admin)
 export function getUsers(page = 1, perPage = 10) {
@@ -13,11 +12,19 @@ export function getUserById(userId: number) {
   return api<User>(`/users/${userId}`);
 }
 
+// POST /users/ - Cria um novo usuário globalmente (caso precise no futuro)
+export function createUser(userData: CreateUserInput) {
+  return api<User>("/users", {
+    method: "POST",
+    body: userData,
+  });
+}
+
 // PUT /users/{user_id} - Atualiza os dados de um usuário específico
 export function updateUser(userId: number, userData: UpdateUserInput) {
   return api<void>(`/users/${userId}`, {
     method: "PUT",
-    body: userData,
+    body: userData, // Passa o objeto contendo o password obrigatório e demais dados
   });
 }
 
