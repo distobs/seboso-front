@@ -2,15 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { getStoreById } from "../../../services/store.service";
-// Importações para lidar com o catálogo e detalhes dos livros
-import {
-  listCatalogByStore,
-  getBookById,
-} from "../../../services/book.service";
+import { getBookById } from "../../../services/book.service";
+import { listCatalogByStore } from "../../../services/book.service";
 
 import type { Store } from "../../../types/store";
 import type { CatalogItem } from "../../../types/catalog";
-// Importação do tipo Book para acoplar os detalhes dos livros no catálogo
 import type { Book } from "../../../types/book";
 
 import StoreInfoCard from "../../../components/store/StoreInfoCard";
@@ -47,7 +43,7 @@ export default function StoreDetails() {
           listCatalogByStore(Number(id)),
         ]);
 
-        // Para cada item do catálogo, buscamos os detalhes do livro correspondente. Fazemos isso em paralelo usando Promise.all para não bloquear a renderização.
+        // Para cada item do catálogo, buscamos os detalhes do livro correspondente.
         const booksPromises = catalogData.map((item) =>
           getBookById(item.book_id)
             .then((bookData) => ({ ...item, bookDetails: bookData }))
@@ -166,7 +162,7 @@ export default function StoreDetails() {
                     item.bookDetails?.title || `Livro #${item.book_id}`;
                   const bookAuthor =
                     item.bookDetails?.author || "Autor não informado";
-                  const bookCover = item.bookDetails?.cover_url; // Ajuste para a chave da capa vinda do seu 'GET /books/{id}'
+                  const bookCover = item.bookDetails?.cover_url; 
 
                   return (
                     <div
@@ -191,12 +187,13 @@ export default function StoreDetails() {
                           </div>
                         )}
 
-                        {item.description && (
+                        {/* 🟢 Corrigido de item.description para item.state */}
+                        {item.state && (
                           <span
                             className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs text-gray-700 text-[10px] font-bold px-2 py-1 rounded-md shadow-xs border border-gray-100 uppercase tracking-wide max-w-30 truncate"
-                            title={item.description}
+                            title={item.state}
                           >
-                            {item.description}
+                            {item.state}
                           </span>
                         )}
                       </div>
@@ -225,7 +222,8 @@ export default function StoreDetails() {
                               Preço
                             </span>
                             <span className="text-base font-black text-gray-900">
-                              {Number(item.price).toLocaleString("pt-BR", {
+                              {/* 🟢 Corrigido: Divide por 100 para converter centavos da API para Real */}
+                              {(item.price / 100).toLocaleString("pt-BR", {
                                 style: "currency",
                                 currency: "BRL",
                               })}
@@ -236,8 +234,8 @@ export default function StoreDetails() {
                             <span className="text-[9px] font-bold text-gray-400 block uppercase tracking-wider leading-none">
                               Disponível
                             </span>
-                            <span className="text-xs font-bold text-gray-600">
-                              {item.quantity} un.
+                            <span className={`text-xs font-bold ${item.quantity <= 0 ? 'text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-sm' : 'text-gray-600'}`}>
+                              {item.quantity <= 0 ? "Esgotado" : `${item.quantity} un.`}
                             </span>
                           </div>
                         </div>

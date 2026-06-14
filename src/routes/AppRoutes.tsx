@@ -20,7 +20,9 @@ import BooksList from "../pages/dashboard/books/BooksList";
 import BookCreate from "../pages/dashboard/books/BookCreate";
 import BookEdit from "../pages/dashboard/books/BookEdit";
 
+// Importação do catálogo interno do sebo
 import StoreCatalog from "../pages/dashboard/store/StoreCatalog";
+
 import StoreEdit from "../pages/dashboard/store/StoreEdit";
 import StoreList from "../pages/dashboard/store/StoreList";
 import StoreCreate from "../pages/dashboard/store/StoreCreate";
@@ -44,7 +46,6 @@ function DashboardPage({
 }: {
   children: React.ReactNode;
   location: string;
-
   allowAdmin?: boolean;
   allowOwner?: boolean;
   allowEmployee?: boolean;
@@ -84,7 +85,6 @@ export default function AppRoutes() {
         }
       />
 
-
       {/* PÚBLICO: Catálogo geral e aberto de livros cadastrados no sistema */}
       <Route path="/books" element={
           <Layout pageTitle="Livros" location={location}>
@@ -115,7 +115,6 @@ export default function AppRoutes() {
       {/* AUTENTICAÇÃO: Tela de cadastro de novos usuários */}
       <Route path="/signup" element={<Signup />} />
 
-      
       {/* DASHBOARD: Página inicial do painel (visão geral customizada por usuário) */}
       <Route path="/dashboard" element={
           <DashboardPage location={location}>
@@ -228,7 +227,6 @@ export default function AppRoutes() {
           </DashboardPage>
         }
       />
-
 
       {/* ADMIN GLOBAL: Painel de controle e listagem de todos os usuários cadastrados no sistema */}
       <Route path="/dashboard/users" element={

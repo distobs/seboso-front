@@ -10,17 +10,14 @@ export type UpdateCatalogInput = Partial<CatalogItem> & { store_id: number; book
 
 // CRUD GLOBAL DE LIVROS
 
-// GET /books?page=<> & per_page=<> - Lista paginada de livros (Admin)
 export function getBooks(page = 1, perPage = 10) {
   return api<Book[]>(`/books?page=${page}&per_page=${perPage}`);
 }
 
-// GET /books/{book_id} - Detalhes de um livro específico
 export function getBookById(bookId: number) {
   return api<Book>(`/books/${bookId}`);
 }
 
-// POST /books/ - Cria um novo livro
 export function createBook(bookData: CreateBookInput) {
   return api<void>("/books", {
     method: "POST",
@@ -28,7 +25,6 @@ export function createBook(bookData: CreateBookInput) {
   });
 }
 
-// PUT /books/{book_id} - Atualiza os dados de um livro específico
 export function updateBook(bookId: number, bookData: UpdateBookInput) {
   return api<void>(`/books/${bookId}`, {
     method: "PUT",
@@ -36,45 +32,55 @@ export function updateBook(bookId: number, bookData: UpdateBookInput) {
   });
 }
 
-// DELETE /books/{book_id} - Remove um livro específico
 export function deleteBook(bookId: number) {
   return api<void>(`/books/${bookId}`, {
     method: "DELETE",
   });
 }
 
-// GERENCIMANETO DE CATÁLOGO (LIVROS EM SEBOS)
+// GERENCIAMENTO DE CATÁLOGO (LIVROS EM SEBOS)
 
-// GET /catalog - Lista todos os livros em todos os sebos (Admin)
 export function listAllCatalog() {
   return api<CatalogItem[]>("/catalog");
 }
 
-// GET /catalog/{store_id} - Lista livros de um sebo específico
 export function listCatalogByStore(storeId: number) {
   return api<CatalogItem[]>(`/catalog/${storeId}`);
 }
 
-// POST /catalog - Adiciona um livro a um sebo específico, enviando store_id e book_id no corpo JSON
+// POST /catalog - Envia o preço original sem alterações
 export function addToCatalog(catalogData: AddToCatalogInput) {
+  const backendPayload = {
+    store_id: catalogData.store_id,
+    book_id: catalogData.book_id,
+    price: catalogData.price,
+    quantity: catalogData.quantity,
+    description: catalogData.state || "",
+  };
+
   return api<void>("/catalog", {
     method: "POST",
-    body: catalogData,
+    body: backendPayload,
   });
 }
 
-// PUT /catalog - Atualiza a disponibilidade de um livro em um sebo específico, enviando store_id e book_id no corpo JSON
+// PUT /catalog - Envia o preço original sem alterações via corpo e os IDs via Query String
 export function updateCatalog(catalogData: UpdateCatalogInput) {
-  return api<void>("/catalog", {
+  const backendPayload = {
+    price: catalogData.price,
+    quantity: catalogData.quantity,
+    description: catalogData.state || "",
+  };
+
+  return api<void>(`/catalog?store_id=${catalogData.store_id}&book_id=${catalogData.book_id}`, {
     method: "PUT",
-    body: catalogData,
+    body: backendPayload,
   });
 }
 
-// DELETE /catalog - Remove um livro de um sebo específico, enviando store_id e book_id no corpo JSON
+// DELETE /catalog - Remove um livro usando Query String
 export function removeFromCatalog(storeId: number, bookId: number) {
-  return api<void>("/catalog", {
+  return api<void>(`/catalog?store_id=${storeId}&book_id=${bookId}`, {
     method: "DELETE",
-    body: { store_id: storeId, book_id: bookId },
   });
 }
