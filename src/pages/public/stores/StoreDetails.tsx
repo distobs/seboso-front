@@ -10,11 +10,11 @@ import type { CatalogItem } from "../../../types/catalog";
 import type { Book } from "../../../types/book";
 
 import StoreInfoCard from "../../../components/store/StoreInfoCard";
+import BookCard from "../../../components/ui/BookCard"; // Importado o componente unificado
 import {
   BookOpen,
   ArrowLeft,
   Store as StoreIcon,
-  ImageOff,
 } from "lucide-react";
 
 // Tipo local estendido para acoplar os detalhes do livro que vão chegar da API externa
@@ -93,7 +93,7 @@ export default function StoreDetails() {
         <h2 className="text-xl font-bold text-gray-800">Sebo não encontrado</h2>
         <button
           onClick={() => navigate(-1)}
-          className="mt-4 text-sm text-[#C37351] font-semibold underline"
+          className="mt-4 text-sm text-[#C37351] font-semibold underline cursor-pointer"
         >
           Voltar para a página anterior
         </button>
@@ -108,7 +108,7 @@ export default function StoreDetails() {
         <div className="w-full px-4 sm:px-6 lg:px-12">
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#A85F42] hover:text-[#C37351] bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#A85F42] hover:text-[#C37351] bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md cursor-pointer"
           >
             <ArrowLeft size={16} />
             Voltar
@@ -157,90 +157,34 @@ export default function StoreDetails() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                 {catalog.map((item) => {
-                  // Extrai as informações do livro
-                  const bookTitle =
-                    item.bookDetails?.title || `Livro #${item.book_id}`;
-                  const bookAuthor =
-                    item.bookDetails?.author || "Autor não informado";
-                  const bookCover = item.bookDetails?.cover_url; 
+                  // Constrói um objeto do tipo Book seguro caso a API paralela falhe ou atrase
+                  const fallbackBook: Book = item.bookDetails ?? {
+                    id: item.book_id,
+                    title: `Livro #${item.book_id}`,
+                    author: "Autor não informado",
+                    description: null,
+                    published_at: null,
+                    isbn_10_code: null,
+                    isbn_13_code: null,
+                    cover_type: null,
+                    cover_url: null,
+                    edition: null,
+                    language: null,
+                    genre: null,
+                    publisher: null,
+                    pages: null,
+                    dimensions: null,
+                    created_at: "",
+                    updated_at: "",
+                  };
 
                   return (
-                    <div
+                    <BookCard
                       key={`${item.store_id}-${item.book_id}`}
-                      className="group bg-white rounded-2xl border border-gray-100 shadow-xs hover:shadow-md hover:border-gray-200/80 transition-all duration-200 overflow-hidden flex flex-col h-full"
-                    >
-                      {/* Container da Capa do Livro */}
-                      <div className="relative aspect-4/5 bg-gray-50 flex items-center justify-center border-b border-gray-100 overflow-hidden shrink-0">
-                        {bookCover ? (
-                          <img
-                            src={bookCover}
-                            alt={`Capa do livro ${bookTitle}`}
-                            className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-300"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="flex flex-col items-center gap-2 text-gray-300">
-                            <ImageOff size={32} strokeWidth={1.5} />
-                            <span className="text-[10px] font-medium tracking-wide uppercase">
-                              Sem Capa
-                            </span>
-                          </div>
-                        )}
-
-                        {/* 🟢 Corrigido de item.description para item.state */}
-                        {item.state && (
-                          <span
-                            className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs text-gray-700 text-[10px] font-bold px-2 py-1 rounded-md shadow-xs border border-gray-100 uppercase tracking-wide max-w-30 truncate"
-                            title={item.state}
-                          >
-                            {item.state}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Corpo das Informações */}
-                      <div className="p-4 flex flex-col flex-1 justify-between gap-3">
-                        <div className="space-y-1">
-                          <h3
-                            className="font-bold text-gray-900 text-sm line-clamp-2 leading-snug group-hover:text-[#C37351] transition-colors"
-                            title={bookTitle}
-                          >
-                            {bookTitle}
-                          </h3>
-                          <p
-                            className="text-xs text-gray-400 font-medium truncate"
-                            title={bookAuthor}
-                          >
-                            {bookAuthor}
-                          </p>
-                        </div>
-
-                        {/* Rodapé com Preço / Detalhes de Estoque */}
-                        <div className="pt-3 border-t border-gray-50 flex items-center justify-between mt-auto">
-                          <div>
-                            <span className="text-[10px] font-bold text-gray-400 block uppercase tracking-wider leading-none">
-                              Preço
-                            </span>
-                            <span className="text-base font-black text-gray-900">
-                              {/* 🟢 Corrigido: Divide por 100 para converter centavos da API para Real */}
-                              {(item.price / 100).toLocaleString("pt-BR", {
-                                style: "currency",
-                                currency: "BRL",
-                              })}
-                            </span>
-                          </div>
-
-                          <div className="text-right">
-                            <span className="text-[9px] font-bold text-gray-400 block uppercase tracking-wider leading-none">
-                              Disponível
-                            </span>
-                            <span className={`text-xs font-bold ${item.quantity <= 0 ? 'text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-sm' : 'text-gray-600'}`}>
-                              {item.quantity <= 0 ? "Esgotado" : `${item.quantity} un.`}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                      book={fallbackBook}
+                      catalogPrice={item.price} // Removeu a divisão / 100 antiga daqui
+                      catalogQuantity={item.quantity}
+                    />
                   );
                 })}
               </div>

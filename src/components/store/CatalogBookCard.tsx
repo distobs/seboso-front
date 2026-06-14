@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { CatalogItem } from "../../types/catalog";
 import { Bookmark, Layers, ShieldAlert } from "lucide-react";
 
@@ -5,19 +6,22 @@ type CatalogBookCardProps = {
   item: CatalogItem;
 };
 
-// Função utilitária para formatar os centavos em Moeda Real (R$)
-const formatCurrency = (cents: number) => {
+// Formata o preço original de forma direta, sem divisão por 100
+const formatCurrency = (value: number) => {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
-  }).format(cents / 100);
+  }).format(value);
 };
 
 export default function CatalogBookCard({ item }: CatalogBookCardProps) {
   const isOutOfStock = item.quantity <= 0;
 
   return (
-    <div className="border border-gray-100 rounded-2xl p-5 bg-white shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full min-h-40 group">
+    <Link 
+      to={`/books/${item.book_id}`}
+      className="border border-gray-100 rounded-2xl p-5 bg-white shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full min-h-40 group cursor-pointer hover:border-gray-200"
+    >
       <div className="flex justify-between items-start gap-4">
         
         {/* Lado Esquerdo: Identificação e Estado do Livro */}
@@ -46,13 +50,13 @@ export default function CatalogBookCard({ item }: CatalogBookCardProps) {
               <Layers size={11} /> {item.quantity} un.
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 mt-3 px-2.5 py-0.5 text-[11px] font-bold rounded-md bg-rose-50 text-rose-700 border border-rose-100Este item está indisponível">
+            <span className="inline-flex items-center gap-1 mt-3 px-2.5 py-0.5 text-[11px] font-bold rounded-md bg-rose-50 text-rose-700 border border-rose-100">
               <ShieldAlert size={11} /> Esgotado
             </span>
           )}
         </div>
 
       </div>
-    </div>
+    </Link>
   );
 }
