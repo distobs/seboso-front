@@ -3,8 +3,12 @@ import BookCard from "../../components/ui/BookCard";
 import type { Book } from "../../types/book";
 import { getBooks } from "../../services/book.service";
 import { BookOpen, AlertCircle, RefreshCw } from "lucide-react";
+import { useSearch } from "../../hooks/useSearch"; // Importa o hook de busca
 
 export default function Books() {
+  // CONTEXTO: Consome o termo de busca digitado na Sidebar global
+  const { searchTerm } = useSearch();
+
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState("");
@@ -51,6 +55,15 @@ export default function Books() {
       isMounted = false; // Cancela a atualização se o componente for desmontado no meio do fetch
     };
   }, []); // O array de dependências vazio garante que a busca ocorra apenas uma vez ao montar o componente
+
+  // FILTRAGEM: Cria uma nova lista de livros filtrada por título ou autor em tempo real
+  const filteredBooks = books.filter((bookItem) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      bookItem.title.toLowerCase().includes(term) ||
+      (bookItem.author && bookItem.author.toLowerCase().includes(term))
+    );
+  });
 
   if (loading) {
     return (
@@ -100,7 +113,7 @@ export default function Books() {
         </div>
         
         <span className="text-xs font-bold text-gray-400 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 shrink-0">
-          {books.length} {books.length === 1 ? "título disponível" : "títulos disponíveis"}
+          {filteredBooks.length} {filteredBooks.length === 1 ? "título localizado" : "títulos localizados"}
         </span>
       </div>
 
@@ -110,9 +123,16 @@ export default function Books() {
           <h3 className="font-semibold text-gray-800">Nenhum livro registrado</h3>
           <p className="text-gray-400 text-xs mt-1">A base de dados global está vazia ou em manutenção.</p>
         </div>
+      ) : filteredBooks.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center shadow-xs">
+          <BookOpen className="mx-auto text-gray-300 mb-3" size={32} />
+          <h3 className="font-semibold text-gray-800">Nenhum resultado</h3>
+          <p className="text-gray-400 text-xs mt-1">Nenhum título corresponde aos termos da sua pesquisa.</p>
+        </div>
       ) : (
+        /* Renderização baseada na lista filtrada */
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-          {books.map((bookItem) => (
+          {filteredBooks.map((bookItem) => (
             <BookCard key={bookItem.id} book={bookItem} />
           ))}
         </div>

@@ -17,7 +17,7 @@ Construído com foco em **escalabilidade, tipagem forte e separação de respons
 | `Tailwind CSS`        | Estilização utility-first e responsividade |
 | `React Router DOM`    | Roteamento e proteção de rotas             |
 | `Context API + Hooks` | Gerenciamento de estado e autenticação     |
-| `Fetch / Axios`       | Integração com API externa                 |
+| `Fetch`       | Integração com API externa                 |
 | `Vite`                | Build tool e dev server otimizado          |
 
 ---

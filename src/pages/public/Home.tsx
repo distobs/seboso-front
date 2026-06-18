@@ -3,8 +3,12 @@ import SeboCard from "../../components/ui/SeboCard";
 import type { Store } from "../../types/store";
 import { getStores } from "../../services/store.service";
 import { Store as StoreIcon, AlertCircle, RefreshCw } from "lucide-react";
+import { useSearch } from "../../hooks/useSearch"; // Importa o hook de busca
 
 export default function Home() {
+  // CONTEXTO: Consome o termo de busca digitado na Sidebar global
+  const { searchTerm } = useSearch();
+
   const [stores, setStores] = useState<Store[]>([]);
   
   // Estados para gerenciar o carregamento e possíveis erros na busca dos dados
@@ -53,6 +57,15 @@ export default function Home() {
       isMounted = false; // Cleanup para evitar vazamento de memória em componentes desmontados
     };
   }, []);
+
+  // FILTRAGEM: Cria uma nova lista filtrada em tempo real por nome ou cidade do sebo
+  const filteredStores = stores.filter((store) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      store.name.toLowerCase().includes(term) ||
+      (store.city && store.city.toLowerCase().includes(term))
+    );
+  });
 
   // Skeleton de carregamento para a página inicial, mantendo a estrutura visual enquanto os dados são buscados
   if (loading) {
@@ -105,7 +118,7 @@ export default function Home() {
         </div>
         
         <span className="text-xs font-bold text-gray-400 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 shrink-0">
-          {stores.length} {stores.length === 1 ? "sebo ativo" : "sebos ativos"}
+          {filteredStores.length} {filteredStores.length === 1 ? "sebo localizado" : "sebos localizados"}
         </span>
       </div>
 
@@ -115,10 +128,16 @@ export default function Home() {
           <h3 className="font-semibold text-gray-800">Nenhum sebo localizado</h3>
           <p className="text-gray-400 text-xs mt-1">Não existem lojas cadastradas na plataforma no momento.</p>
         </div>
+      ) : filteredStores.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center shadow-xs">
+          <StoreIcon className="mx-auto text-gray-300 mb-3" size={32} />
+          <h3 className="font-semibold text-gray-800">Nenhum resultado</h3>
+          <p className="text-gray-400 text-xs mt-1">Nenhum sebo corresponde aos termos da sua pesquisa.</p>
+        </div>
       ) : (
-        /* Substituição do flex-col por um Grid Moderno e Responsivo */
+        /* Renderização baseada na lista filtrada */
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {stores.map((store) => (
+          {filteredStores.map((store) => (
             <SeboCard key={store.id} store={store} />
           ))}
         </div>

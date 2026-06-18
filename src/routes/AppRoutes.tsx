@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useUserLocation } from "../hooks/useUserLocation";
 import ProtectedRoute from "./ProtectedRoute";
+import { SearchProvider } from "../contexts/SearchProvider"; // 1. IMPORTADO O PROVIDER DE BUSCA
 
 import Header from "../components/layout/Header";
 import Layout from "../components/layout/Layout";
@@ -67,182 +68,185 @@ export default function AppRoutes() {
   const location = useUserLocation();
 
   return (
-    <Routes>
-      
-      {/* PÚBLICO: Página inicial que lista os sebos parceiros da plataforma */}
-      <Route path="/" element={
-          <Layout pageTitle="Sebo" location={location}>
-            <Home />
-          </Layout>
-        }
-      />
+    // 2. ENVOLTO TODAS AS ROTAS COM O SEARCHPROVIDER
+    <SearchProvider>
+      <Routes>
+        
+        {/* PÚBLICO: Página inicial que lista os sebos parceiros da plataforma */}
+        <Route path="/" element={
+            <Layout pageTitle="Sebo" location={location}>
+              <Home />
+            </Layout>
+          }
+        />
 
-      <Route path="/stores/:id" element={
-          <>
-            <Header location={location} />
-             <StoreDetails />
-          </>
-        }
-      />
+        <Route path="/stores/:id" element={
+            <>
+              <Header location={location} />
+               <StoreDetails />
+            </>
+          }
+        />
 
-      {/* PÚBLICO: Catálogo geral e aberto de livros cadastrados no sistema */}
-      <Route path="/books" element={
-          <Layout pageTitle="Livros" location={location}>
-            <Books />
-          </Layout>
-        }
-      />
+        {/* PÚBLICO: Catálogo geral e aberto de livros cadastrados no sistema */}
+        <Route path="/books" element={
+            <Layout pageTitle="Livros" location={location}>
+              <Books />
+            </Layout>
+          }
+        />
 
-      <Route path="/books/:id" element={
-          <Layout pageTitle="Detalhes do Livro" location={location}>
-            <BookDetails />
-          </Layout>
-        }
-      />
+        <Route path="/books/:id" element={
+            <Layout pageTitle="Detalhes do Livro" location={location}>
+              <BookDetails />
+            </Layout>
+          }
+        />
 
-      {/* PÚBLICO: Página institucional com informações sobre a plataforma */}
-      <Route path="/about" element={
-          <>
-            <Header location={location} />
-            <About />
-          </>
-        }
-      />
-      
-      {/* AUTENTICAÇÃO: Tela de login para usuários e gestores */}
-      <Route path="/login" element={<Login />} />
-      
-      {/* AUTENTICAÇÃO: Tela de cadastro de novos usuários */}
-      <Route path="/signup" element={<Signup />} />
+        {/* PÚBLICO: Página institucional com informações sobre a plataforma */}
+        <Route path="/about" element={
+            <>
+              <Header location={location} />
+              <About />
+            </>
+          }
+        />
+        
+        {/* AUTENTICAÇÃO: Tela de login para usuários e gestores */}
+        <Route path="/login" element={<Login />} />
+        
+        {/* AUTENTICAÇÃO: Tela de cadastro de novos usuários */}
+        <Route path="/signup" element={<Signup />} />
 
-      {/* DASHBOARD: Página inicial do painel (visão geral customizada por usuário) */}
-      <Route path="/dashboard" element={
-          <DashboardPage location={location}>
-            <DashboardHome />
-          </DashboardPage>
-        }
-      />
-      
-      {/* ADMIN GLOBAL: Lista de controle com todos os livros do banco de dados */}
-      <Route path="/dashboard/books" element={
-          <DashboardPage location={location} allowAdmin>
-            <BooksList />
-          </DashboardPage>
-        }
-      />
+        {/* DASHBOARD: Página inicial do painel (visão geral customizada por usuário) */}
+        <Route path="/dashboard" element={
+            <DashboardPage location={location}>
+              <DashboardHome />
+            </DashboardPage>
+          }
+        />
+        
+        {/* ADMIN GLOBAL: Lista de controle com todos os livros do banco de dados */}
+        <Route path="/dashboard/books" element={
+            <DashboardPage location={location} allowAdmin>
+              <BooksList />
+            </DashboardPage>
+          }
+        />
 
-      {/* RESTRITO (Admin/Owner/Employee): Formulário para registrar um novo livro na base de dados global */}
-      <Route path="/dashboard/books/create" element={
-          <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
-            <BookCreate />
-          </DashboardPage>
-        }
-      />
+        {/* RESTRITO (Admin/Owner/Employee): Formulário para registrar um novo livro na base de dados global */}
+        <Route path="/dashboard/books/create" element={
+            <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
+              <BookCreate />
+            </DashboardPage>
+          }
+        />
 
-      {/* RESTRITO (Admin/Owner/Employee): Tela para editar os metadados de um livro específico */}
-      <Route path="/dashboard/books/:id/edit" element={
-          <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
-            <BookEdit />
-          </DashboardPage>
-        }
-      />
+        {/* RESTRITO (Admin/Owner/Employee): Tela para editar os metadados de um livro específico */}
+        <Route path="/dashboard/books/:id/edit" element={
+            <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
+              <BookEdit />
+            </DashboardPage>
+          }
+        />
 
-      {/* RESTRITO (Admin/Owner/Employee): Gerencia o acervo local e estoque de um sebo específico */}
-      <Route path="/dashboard/stores/:id/catalog" element={
-          <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
-            <StoreCatalog />
-          </DashboardPage>
-        }
-      />
+        {/* RESTRITO (Admin/Owner/Employee): Gerencia o acervo local e estoque de um sebo específico */}
+        <Route path="/dashboard/stores/:id/catalog" element={
+            <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
+              <StoreCatalog />
+            </DashboardPage>
+          }
+        />
 
-      {/* RESTRITO (Admin/Owner): Lista e gerencia a equipe de funcionários contratados de um sebo */}
-      <Route path="/dashboard/stores/:id/employees" element={
-          <DashboardPage location={location} allowAdmin allowOwner>
-            <EmployeesList />
-          </DashboardPage>
-        }
-      />
+        {/* RESTRITO (Admin/Owner): Lista e gerencia a equipe de funcionários contratados de um sebo */}
+        <Route path="/dashboard/stores/:id/employees" element={
+            <DashboardPage location={location} allowAdmin allowOwner>
+              <EmployeesList />
+            </DashboardPage>
+          }
+        />
 
-      {/* RESTRITO (Admin/Owner): Formulário estruturado para adicionar um novo funcionário ao sebo */}
-      <Route path="/dashboard/stores/:id/employees/create" element={
-          <DashboardPage location={location} allowAdmin allowOwner>
-            <EmployeeCreate />
-          </DashboardPage>
-        }
-      />
+        {/* RESTRITO (Admin/Owner): Formulário estruturado para adicionar um novo funcionário ao sebo */}
+        <Route path="/dashboard/stores/:id/employees/create" element={
+            <DashboardPage location={location} allowAdmin allowOwner>
+              <EmployeeCreate />
+            </DashboardPage>
+          }
+        />
 
-      {/* RESTRITO (Admin/Owner/Employee): Edita os dados cadastrais (endereço, telefone) do sebo contextualizado */}
-      <Route path="/dashboard/stores/:id/settings" element={
-          <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
-            <StoreSettings />
-          </DashboardPage>
-        }
-      />
+        {/* RESTRITO (Admin/Owner/Employee): Edita os dados cadastrais (endereço, telefone) do sebo contextualizado */}
+        <Route path="/dashboard/stores/:id/settings" element={
+            <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
+              <StoreSettings />
+            </DashboardPage>
+          }
+        />
 
-      {/* ADMIN GLOBAL: Lista mestre com todos os sebos integrados na plataforma */}
-      <Route path="/dashboard/stores" element={
-          <DashboardPage location={location} allowAdmin>
-            <StoreList/> 
-          </DashboardPage>
-        }
-      />
+        {/* ADMIN GLOBAL: Lista mestre com todos os sebos integrados na plataforma */}
+        <Route path="/dashboard/stores" element={
+            <DashboardPage location={location} allowAdmin>
+              <StoreList/> 
+            </DashboardPage>
+          }
+        />
 
-      <Route
-        path="/dashboard/stores/create"
-        element={
-          <DashboardPage location={location} allowAdmin>
-            <StoreCreate />
-          </DashboardPage>
-        }
-      />
+        <Route
+          path="/dashboard/stores/create"
+          element={
+            <DashboardPage location={location} allowAdmin>
+              <StoreCreate />
+            </DashboardPage>
+          }
+        />
 
-      {/* RESTRITO (Admin/Owner/Employee): Exibe informações detalhadas e perfil interno de um sebo específico */}
-      <Route path="/dashboard/stores/:id" element={
-          <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
-            <StoreDashboard />
-          </DashboardPage>
-        }
-      />
+        {/* RESTRITO (Admin/Owner/Employee): Exibe informações detalhadas e perfil interno de um sebo específico */}
+        <Route path="/dashboard/stores/:id" element={
+            <DashboardPage location={location} allowAdmin allowOwner allowEmployee>
+              <StoreDashboard />
+            </DashboardPage>
+          }
+        />
 
-      {/* RESTRITO (Admin/Owner): Rota alternativa direta para editar dados do sebo por ID */}
-      <Route path="/dashboard/stores/:id/edit" element={
-          <DashboardPage location={location} allowAdmin allowOwner>
-            <StoreEdit />
-          </DashboardPage>
-        }
-      />
-      
-      {/* RESTRITO (Admin/Owner): Formulário estruturado para atualizar os dados de um funcionário de um sebo */}
-      <Route path="/dashboard/stores/:storeId/employees/:id/edit" element={
-          <DashboardPage location={location} allowAdmin allowOwner>
-            <EmployeeEdit />
-          </DashboardPage>
-        }
-      />
+        {/* RESTRITO (Admin/Owner): Rota alternativa direta para editar dados do sebo por ID */}
+        <Route path="/dashboard/stores/:id/edit" element={
+            <DashboardPage location={location} allowAdmin allowOwner>
+              <StoreEdit />
+            </DashboardPage>
+          }
+        />
+        
+        {/* RESTRITO (Admin/Owner): Formulário estruturado para atualizar os dados de um funcionário de um sebo */}
+        <Route path="/dashboard/stores/:storeId/employees/:id/edit" element={
+            <DashboardPage location={location} allowAdmin allowOwner>
+              <EmployeeEdit />
+            </DashboardPage>
+          }
+        />
 
-      {/* FALLBACK (Admin/Owner): Rota antiga genérica para listar funcionários (mantida por segurança) */}
-      <Route path="/dashboard/employees" element={
-          <DashboardPage location={location} allowAdmin allowOwner >
-            <EmployeesList />
-          </DashboardPage>
-        }
-      />
+        {/* FALLBACK (Admin/Owner): Rota antiga genérica para listar funcionários (mantida por segurança) */}
+        <Route path="/dashboard/employees" element={
+            <DashboardPage location={location} allowAdmin allowOwner >
+              <EmployeesList />
+            </DashboardPage>
+          }
+        />
 
-      {/* ADMIN GLOBAL: Painel de controle e listagem de todos os usuários cadastrados no sistema */}
-      <Route path="/dashboard/users" element={
-          <DashboardPage location={location} allowAdmin>
-            <UsersList />
-          </DashboardPage>
-        }
-      />
+        {/* ADMIN GLOBAL: Painel de controle e listagem de todos os usuários cadastrados no sistema */}
+        <Route path="/dashboard/users" element={
+            <DashboardPage location={location} allowAdmin>
+              <UsersList />
+            </DashboardPage>
+          }
+        />
 
-      {/* ADMIN GLOBAL: Tela para gerenciar permissões e dados cadastrais de qualquer usuário */}
-      <Route path="/dashboard/users/:id/edit" element={
-          <DashboardPage location={location} allowAdmin>
-            <UserEdit />
-          </DashboardPage>
-        }
-      />
-    </Routes>
+        {/* ADMIN GLOBAL: Tela para gerenciar permissões e dados cadastrais de qualquer usuário */}
+        <Route path="/dashboard/users/:id/edit" element={
+            <DashboardPage location={location} allowAdmin>
+              <UserEdit />
+            </DashboardPage>
+          }
+        />
+      </Routes>
+    </SearchProvider>
   );
 }

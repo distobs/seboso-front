@@ -1,10 +1,10 @@
 type Props = {
   pageTitle: string;
-  searchTerm: string;
-  onSearchChange: (value: string) => void;
+  searchTerm?: string;               // Mudado para opcional com "?"
+  onSearchChange?: (value: string) => void; // Mudado para opcional com "?"
 };
 
-export default function Sidebar({ pageTitle, searchTerm, onSearchChange }: Props) {
+export default function Sidebar({ pageTitle, searchTerm = "", onSearchChange }: Props) {
   return (
     <aside 
       className="
@@ -29,7 +29,8 @@ export default function Sidebar({ pageTitle, searchTerm, onSearchChange }: Props
           type="text"
           placeholder="Digite o nome..."
           value={searchTerm} 
-          onChange={(e) => onSearchChange(e.target.value)} 
+          // O operador ?. garante que a função só roda se ela realmente foi passada pelo Layout
+          onChange={(e) => onSearchChange?.(e.target.value)} 
           className="
             w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm
             text-gray-800 placeholder-gray-400 shadow-inner outline-none 
