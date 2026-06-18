@@ -9,7 +9,7 @@ type LayoutProps = {
 };
 
 export default function Layout({ children, pageTitle, location }: LayoutProps) {
-  // 2. Consome o estado global de busca do contexto
+  //Consome o estado global de busca do contexto
   const { searchTerm, setSearchTerm } = useSearch();
 
   return (
@@ -19,7 +19,7 @@ export default function Layout({ children, pageTitle, location }: LayoutProps) {
       
       <div className="flex">
 
-        {/* 3. Passe os dados obrigatórios para a Sidebar */}
+        {/*Passa os dados obrigatórios para a Sidebar */}
         <Sidebar 
           pageTitle={pageTitle} 
           searchTerm={searchTerm} 

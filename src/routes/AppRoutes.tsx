@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useUserLocation } from "../hooks/useUserLocation";
 import ProtectedRoute from "./ProtectedRoute";
-import { SearchProvider } from "../contexts/SearchProvider"; // 1. IMPORTADO O PROVIDER DE BUSCA
+import { SearchProvider } from "../contexts/SearchProvider"; // Importação do provedor de contexto para busca global
 
 import Header from "../components/layout/Header";
 import Layout from "../components/layout/Layout";
@@ -68,7 +68,7 @@ export default function AppRoutes() {
   const location = useUserLocation();
 
   return (
-    // 2. ENVOLTO TODAS AS ROTAS COM O SEARCHPROVIDER
+    // Envolvendo as rotas com o SearchProvider para fornecer o contexto de busca global a toda a aplicação
     <SearchProvider>
       <Routes>
         
@@ -190,6 +190,7 @@ export default function AppRoutes() {
           }
         />
 
+        {/* RESTRITO (Admin): Formulário para criar um novo sebo e integrá-lo à plataforma */}
         <Route
           path="/dashboard/stores/create"
           element={
